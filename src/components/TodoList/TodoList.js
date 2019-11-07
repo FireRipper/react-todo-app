@@ -2,20 +2,24 @@ import React from 'react'
 import './TodoList.css'
 import TodoListItem from '../TodoListItem'
 
-const TodoList = ({ todos }) => {
+const TodoList = ({ todos, onDeleted }) => {
 
     const elements = todos.map((item) => {
-        
+    
+        // get id by item and any props by item
         const { id, ...itemProps } = item
 
         return (
+            //pass id in key, another props pass in TodoListItem 
             <li key={id} className="list-group-item">
                 <TodoListItem { ...itemProps }
-                onDeleted={() => console.log('test - del')} />
+                onDeleted={() => onDeleted(id)} />
             </li>
         )
     })
 
+
+    //Generate list with elements
     return (
         <ul className="list-group TodoList">
             { elements }

@@ -3,11 +3,13 @@ import './TodoListItem.css'
 
 export default class TodoListItem extends Component {
 
+    // initial state
     state = {
         done: false,
         important: false
     }
 
+    // change state object done
     onLabelClick = () => { 
         this.setState(({done}) =>{
             return {
@@ -16,6 +18,7 @@ export default class TodoListItem extends Component {
         })
     }
 
+    // change state object important
     onMarkImportant = () => {
         this.setState((state) => {
             return {
@@ -25,7 +28,11 @@ export default class TodoListItem extends Component {
     }
 
     render() {
+
+        //get label, onDeleted by props
         const { label, onDeleted } = this.props
+
+        //get done, important by state
         const { done, important } = this.state
 
         let classNames = 'TodoListItem'
