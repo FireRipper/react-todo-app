@@ -29,7 +29,7 @@ export default class TodoListItem extends Component {
 
     render() {
 
-        //get label, onDeleted by props
+        //get label, onDeleted by props (onDelete we get in App)
         const { label, onDeleted } = this.props
 
         //get done, important by state
