@@ -17,7 +17,8 @@ export default class App extends Component {
             this.createTodoItem('Make app'),
             this.createTodoItem('Have a lunch')
         ],
-        term: ''
+        term: '',
+        filter: 'all' //active, done, all
     }
 
     createTodoItem(label) {
@@ -102,11 +103,15 @@ export default class App extends Component {
         })
     }
 
+    onFilterChange = (filter) => {
+        this.setState({ filter })
+    }
+
     updateData = (config) => {
         this.setState(config)
     }
 
-    searchTodo (items, term) {
+    searchTodo(items, term) {
 
         if (term.length === 0) {
             return items
@@ -117,13 +122,35 @@ export default class App extends Component {
         })
     }
 
-    render() {
-        const { todoData, term } = this.state
 
-        const visibleItems = this.searchTodo(todoData, term)
+    //get array elements and current filter ( all/active/important/done )
+    filterTodo(items, filter) {
+        //check filter and return items with filter
+        switch (filter) {
+            case 'all':
+                return items
+            case 'active':
+                return items.filter((item) => !item.done)
+            case 'important':
+                return items.filter((item) => item.important && !item.done)
+            case 'done':
+                return items.filter((item) => item.done)
+            default:
+                return items
+        }
+    }
+
+    render() {
+        
+        //get data by initial state (elements: todoData, term and filter)
+        const { todoData, term, filter } = this.state
+
+        //filter our data if we have some filter and then we can search item or items
+        const visibleItems = this.filterTodo(this.searchTodo(todoData, term)
+            , filter)
 
         //get state, filter him (find element "done" === true and get length)
-        // filter - created new array and We don't change our state !!
+        // filter - created new array so we don't change our state !!
         const doneCount = todoData.filter((el) => el.done).length
 
         //get state (element done)  
@@ -133,8 +160,12 @@ export default class App extends Component {
             <div className="TodoApp" >
                 <AppHeader toDo={todoCount} done={doneCount} />
                 <div className="TopPanel d-flex">
-                    <SearchPanel update={this.updateData}/>
-                    <ItemStatusFilter />
+                    <SearchPanel update={this.updateData} />
+                    <ItemStatusFilter
+                        filter={filter}
+                        //function for update state (filter)!!
+                        onFilterChange={this.onFilterChange}
+                    />
                 </div>
                 <TodoList
                     todos={visibleItems}
