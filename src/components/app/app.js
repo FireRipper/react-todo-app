@@ -3,8 +3,7 @@ import AppHeader from '../AppHeader'
 import TodoList from '../TodoList'
 import SearchPanel from '../SearchPanel'
 import ItemStatusFilter from '../ItemStatusFilter'
-import InputAdd from '../InputAdd'
-import ButtonAdd from '../ButtonAdd'
+import FormAddTodo from '../FormAddTodo'
 import './app.css'
 
 export default class App extends Component {
@@ -17,7 +16,8 @@ export default class App extends Component {
             this.createTodoItem('Drink coffee'),
             this.createTodoItem('Make app'),
             this.createTodoItem('Have a lunch')
-        ]
+        ],
+        term: ''
     }
 
     createTodoItem(label) {
@@ -102,8 +102,25 @@ export default class App extends Component {
         })
     }
 
+    updateData = (config) => {
+        this.setState(config)
+    }
+
+    searchTodo (items, term) {
+
+        if (term.length === 0) {
+            return items
+        }
+
+        return items.filter((item) => {
+            return item.label.toLowerCase().includes(term)
+        })
+    }
+
     render() {
-        const { todoData } = this.state
+        const { todoData, term } = this.state
+
+        const visibleItems = this.searchTodo(todoData, term)
 
         //get state, filter him (find element "done" === true and get length)
         // filter - created new array and We don't change our state !!
@@ -116,19 +133,19 @@ export default class App extends Component {
             <div className="TodoApp" >
                 <AppHeader toDo={todoCount} done={doneCount} />
                 <div className="TopPanel d-flex">
-                    <SearchPanel />
+                    <SearchPanel update={this.updateData}/>
                     <ItemStatusFilter />
                 </div>
                 <TodoList
-                    todos={todoData}
+                    todos={visibleItems}
                     //call function deleteItem
                     onDeleted={this.deleteItem}
                     isImportant={this.onToggleImportant}
                     isDone={this.onToggleDone}
                 />
-                <div className='d-flex justify-content-around AddPanel'>
-                    <InputAdd />
-                    <ButtonAdd onAdd={this.addItem} />
+
+                <div className='AddPanel'>
+                    <FormAddTodo onAdd={this.addItem} />
                 </div>
             </div>
         )

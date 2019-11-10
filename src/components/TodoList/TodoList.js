@@ -14,9 +14,9 @@ const TodoList = ({ todos, onDeleted, isImportant, isDone }) => {
             <li key={id} className="list-group-item">
                 <TodoListItem {...itemProps}
                     onDeleted={() => onDeleted(id)}
-                    isImportant={() => isImportant(id)} 
+                    isImportant={() => isImportant(id)}
                     isDone={() => isDone(id)}
-                    />
+                />
             </li>
         )
     })
@@ -25,7 +25,7 @@ const TodoList = ({ todos, onDeleted, isImportant, isDone }) => {
     //Generate list with elements
     return (
         <ul className="list-group TodoList">
-            {elements}
+            { elements }
         </ul>
     )
 }
